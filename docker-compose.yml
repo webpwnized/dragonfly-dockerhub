@@ -1,0 +1,17 @@
+# Documentation: https://github.com/compose-spec/compose-spec/blob/master/spec.md
+# Purpose: Run containers for the Mutillidae environment
+
+version: '3.8'
+services:
+
+  www:
+    container_name: www
+    image: docker.io/webpwnized/mutillidae:www
+    ports:
+      - 127.0.0.1:80:80
+    networks:
+      - httpnet
+
+# Create network segments for the containers to use
+networks:
+    httpnet:
