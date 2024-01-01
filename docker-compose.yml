@@ -1,17 +1,23 @@
+# Docker Compose Configuration for Dragonfly Application
 # Documentation: https://github.com/compose-spec/compose-spec/blob/master/spec.md
-# Purpose: Run containers for the Mutillidae environment
-
 version: '3.8'
-services:
 
+# Define services
+services:
+  # Service for the www container
   www:
+    # Container name for easy identification
     container_name: www
-    image: docker.io/webpwnized/mutillidae:www
+    # Docker image for the dragonfly www service
+    image: docker.io/webpwnized/dragonfly:www
+    # Map host port 80 to container port 80 (localhost only)
     ports:
       - 127.0.0.1:80:80
+    # Connect the www service to the httpnet network
     networks:
       - httpnet
 
-# Create network segments for the containers to use
+# Define networks
 networks:
-    httpnet:
+  # Network segment for HTTP communication
+  httpnet:
