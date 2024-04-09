@@ -1,10 +1,13 @@
 #!/bin/bash
-# Script must be run from the docker directory 
+# Script must be run from the project root directory
 
-echo "";
-echo "Starting containers";
-docker-compose -f docker-compose.yml up -d;
+# Define file paths
+DOCKERFILE_PATH=".build/www/Dockerfile"
+DOCKER_COMPOSE_PATH=".build/docker-compose.yml"
 
-echo "";
-echo "Clearing the screen";
-clear;
+echo "Building containers"
+docker build --file "$DOCKERFILE_PATH" --tag webpwnized/dragonfly:www .
+
+echo "Starting containers"
+docker-compose --file "$DOCKER_COMPOSE_PATH" up --detach
+echo "Containers started successfully"

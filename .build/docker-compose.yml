@@ -4,6 +4,7 @@
 # From project root, run with:
 #   docker-compose --file .build/docker-compose.yml up --detach
 
+# Define the version of Docker Compose syntax being used
 version: '3.8'
 
 # Define services
@@ -14,10 +15,15 @@ services:
     container_name: www
     # Docker image for the dragonfly www service
     image: docker.io/webpwnized/dragonfly:www
-    # Map host port 80 to container port 80 (localhost only)
+    
+    # Port mapping: maps host ports to container ports
     ports:
+      # Map host port 80 to container port 80 (localhost only)
       - 127.0.0.1:80:80
-    # Connect the www service to the httpnet network
+      # Map host port 8888 to container port 80 for DAST scan (localhost only)
+      - 127.0.0.1:8888:80
+      
+    # Network configuration: connects the www service to the httpnet network
     networks:
       - httpnet
 
@@ -25,3 +31,4 @@ services:
 networks:
   # Network segment for HTTP communication
   httpnet:
+    # This network segment is used for HTTP communication between containers
