@@ -2,7 +2,7 @@
 # Documentation: https://github.com/compose-spec/compose-spec/blob/master/spec.md
 
 # From project root, run with:
-#   docker-compose --file .build/docker-compose.yml up --detach
+#   docker compose --file .build/docker-compose.yml up --detach
 
 # Define the version of Docker Compose syntax being used
 version: '3.8'

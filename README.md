@@ -13,7 +13,7 @@
 
 ## TLDR
 
-	docker-compose --file .build/docker-compose.yml up --detach
+	docker compose --file .build/docker-compose.yml up --detach
 
 ## Instructions
 
@@ -27,7 +27,7 @@ The Dockerfile files in each directory contain the instructions to build each co
 
 To build the containers, if neccesary, and bring the containers up, run the following command from the project root.
 
-    docker-compose --file .build/docker-compose.yml up --detach
+    docker compose --file .build/docker-compose.yml up --detach
 
 Once the containers are running, the following services are available on localhost.
 
