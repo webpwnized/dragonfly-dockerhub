@@ -4,6 +4,8 @@
 # From project root, run with:
 #   docker compose --file .build/docker-compose.yml up --detach
 
+user: root
+
 # Define services
 services:
   # Service for the www container
