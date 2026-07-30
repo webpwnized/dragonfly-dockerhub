@@ -4,9 +4,6 @@
 # From project root, run with:
 #   docker compose --file .build/docker-compose.yml up --detach
 
-# Define the version of Docker Compose syntax being used
-version: '3.8'
-
 # Define services
 services:
   # Service for the www container
@@ -16,6 +13,9 @@ services:
     # Docker image for the dragonfly www service
     image: docker.io/webpwnized/dragonfly:www
     
+    security_opt:
+      - no-new-privileges:true  
+
     # Port mapping: maps host ports to container ports
     ports:
       # Map host port 80 to container port 80 (localhost only)
