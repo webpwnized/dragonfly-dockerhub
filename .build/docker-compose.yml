@@ -4,33 +4,36 @@
 # From project root, run with:
 #   docker compose --file .build/docker-compose.yml up --detach
 
-user: root
-
-# Define services
+# Define services.
 services:
-  # Service for the www container
+  # Service for the www container.
   www:
-    # Container name for easy identification
+    # Container name for easy identification.
     container_name: www
-    # Docker image for the dragonfly www service
-    image: docker.io/webpwnized/dragonfly:www
-    
-    security_opt:
-      - no-new-privileges:true  
 
-    # Port mapping: maps host ports to container ports
+    # Docker image for the Dragonfly www service.
+    image: docker.io/webpwnized/dragonfly:www
+
+    # Intentionally run the container as root for SAST testing.
+    user: root
+
+    # Prevent processes from gaining additional privileges.
+    security_opt:
+      - no-new-privileges:true
+
+    # Port mappings.
     ports:
-      # Map host port 80 to container port 80 (localhost only)
+      # Map host port 80 to container port 80 on localhost.
       - 127.0.0.1:80:80
-      # Map host port 8888 to container port 80 for DAST scan (localhost only)
+
+      # Map host port 8888 to container port 80 for DAST scanning.
       - 127.0.0.1:8888:80
-      
-    # Network configuration: connects the www service to the httpnet network
+
+    # Connect the service to the HTTP network.
     networks:
       - httpnet
 
-# Define networks
+# Define networks.
 networks:
-  # Network segment for HTTP communication
+  # Network segment for HTTP communication between containers.
   httpnet:
-    # This network segment is used for HTTP communication between containers
