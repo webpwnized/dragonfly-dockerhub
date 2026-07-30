@@ -4,6 +4,8 @@
 # From project root, run with:
 #   docker compose --file .build/docker-compose.yml up --detach
 
+# version: '3.8'
+
 # Define services.
 services:
   # Service for the www container.
@@ -13,9 +15,6 @@ services:
 
     # Docker image for the Dragonfly www service.
     image: docker.io/webpwnized/dragonfly:www
-
-    # Intentionally run the container as root for SAST testing.
-    user: root
 
     # Prevent processes from gaining additional privileges.
     security_opt:
