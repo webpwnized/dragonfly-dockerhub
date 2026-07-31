@@ -4,7 +4,7 @@
 # From project root, run with:
 #   docker compose --file .build/docker-compose.yml up --detach
 
-# version: '3.8'
+version: '3.8'
 
 # Define services.
 services:
@@ -17,8 +17,8 @@ services:
     image: docker.io/webpwnized/dragonfly:www
 
     # Prevent processes from gaining additional privileges.
-    security_opt:
-      - no-new-privileges:true
+    # security_opt:
+      # - no-new-privileges:true
 
     # Port mappings.
     ports:
