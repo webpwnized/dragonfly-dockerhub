@@ -7,13 +7,9 @@
                  /____/                  /____/                                                       
 ```
 
-## Project Announcements
-
-* **Twitter**: [https://twitter.com/webpwnized](https://twitter.com/webpwnized)
-
 ## TLDR
 
-	docker compose --file .build/docker-compose.yml up --detach
+	docker compose --file .build/docker-compose.yaml up --detach
 
 ## Instructions
 
@@ -21,13 +17,13 @@ The application is run from containers in this project.
 
 - **www** - Apache, PHP, and application source code. The web site is exposed on ports 80,and 8088.
 
-The Dockerfile files in each directory contain the instructions to build each container. The docker-compose.yml file contains the instructions to set up networking for the container, and kick off the builds specified in the Dockerfile files.
+The Dockerfile files in each directory contain the instructions to build each container. The docker-compose.yaml file contains the instructions to set up networking for the container, and kick off the builds specified in the Dockerfile files.
 
 ## Build and Run
 
 To build the containers, if neccesary, and bring the containers up, run the following command from the project root.
 
-    docker compose --file .build/docker-compose.yml up --detach
+    docker compose --file .build/docker-compose.yaml up --detach
 
 Once the containers are running, the following services are available on localhost.
 

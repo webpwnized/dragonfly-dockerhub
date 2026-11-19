@@ -1,6 +1,6 @@
 #!/bin/bash
-# Purpose: Stop and remove Docker containers defined in docker-compose.yml
-# Usage: .tools/stop-containers.sh -f /path/to/docker-compose.yml [options]
+# Purpose: Stop and remove Docker containers defined in docker-compose.yaml
+# Usage: .tools/stop-containers.sh -f /path/to/docker-compose.yaml [options]
 
 # Function to print messages with a timestamp
 print_message() {
@@ -9,14 +9,14 @@ print_message() {
 
 # Function to display help message
 show_help() {
-    echo "Usage: $0 -f /path/to/docker-compose.yml [options]"
+    echo "Usage: $0 -f /path/to/docker-compose.yaml [options]"
     echo ""
     echo "Options:"
-    echo "  -f, --file     Path to the docker-compose.yml file (mandatory)."
+    echo "  -f, --file     Path to the docker-compose.yaml file (mandatory)."
     echo "  -h, --help     Display this help message."
     echo ""
     echo "Description:"
-    echo "This script stops and removes Docker containers defined in docker-compose.yml using 'docker compose down' or 'docker-compose down'."
+    echo "This script stops and removes Docker containers defined in docker-compose.yaml using 'docker compose down' or 'docker-compose down'."
     exit 0
 }
 
@@ -53,7 +53,7 @@ fi
 
 # Check if the compose file exists
 if [[ ! -f "$compose_file" ]]; then
-    handle_error "The specified docker-compose.yml file does not exist: $compose_file"
+    handle_error "The specified docker-compose.yaml file does not exist: $compose_file"
 fi
 
 # Check if Docker is installed and running

@@ -1,0 +1,103 @@
+# Validate the Compose configuration and scan it for security issues.
+name: Scan Docker Compose with KICS
+
+on:
+  # Check proposed changes before merge.
+  pull_request: {}
+
+  # Allow maintainers to run the checks from the Actions tab.
+  workflow_dispatch: {}
+
+  # Refresh findings after changes reach development.
+  push:
+    branches:
+      - development
+
+jobs:
+  kics:
+    name: Scan Docker Compose with KICS
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Read the repository and workflow metadata.
+      actions: read
+      contents: read
+      # Publish findings to GitHub Code Scanning.
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        # Dependabot can propose updates to the pinned action.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Validate Docker Compose configuration
+        # Validate syntax and configuration without starting containers.
+        # --quiet prevents resolved configuration values from entering the log.
+        run: docker compose -f .build/docker-compose.yaml config --quiet
+
+      - name: Enforce no-new-privileges
+        id: blocking
+        uses: Checkmarx/kics-github-action@v2.1.20
+        with:
+          path: .build/docker-compose.yaml
+          type: DockerCompose
+
+          # Run only the rule corresponding to the existing Semgrep gate.
+          # Services should set security_opt with no-new-privileges:true.
+          include_queries: 27fcc7d6-c49b-46e0-98f1-6c082a6a2750
+
+          # Findings from this approved rule fail the workflow.
+          ignore_on_exit: none
+          fail_on: critical,high,medium,low,info
+
+          # Keep the blocking report at a predictable location.
+          output_path: kics-reports/blocking
+          output_formats: sarif
+          enable_annotations: true
+          verbose: true
+
+      - name: Audit Docker Compose security
+        # Continue after a blocking finding so developers receive the
+        # broader security report in the same workflow run.
+        if: ${{ !cancelled() && steps.blocking.outcome != 'skipped' }}
+        uses: Checkmarx/kics-github-action@v2.1.20
+        with:
+          path: .build/docker-compose.yaml
+          type: DockerCompose
+
+          # The blocking rule already has its own report.
+          exclude_queries: 27fcc7d6-c49b-46e0-98f1-6c082a6a2750
+
+          # Audit findings are report-only. Execution errors fail the step.
+          ignore_on_exit: results
+
+          output_path: kics-reports/audit
+          output_formats: sarif
+          enable_annotations: true
+          verbose: true
+
+      - name: View blocking report
+        # Preserve access to findings even when the blocking check fails.
+        if: ${{ !cancelled() && hashFiles('kics-reports/blocking/results.sarif') != '' }}
+        run: cat kics-reports/blocking/results.sarif
+
+      - name: View audit report
+        if: ${{ !cancelled() && hashFiles('kics-reports/audit/results.sarif') != '' }}
+        run: cat kics-reports/audit/results.sarif
+
+      - name: Upload blocking findings
+        # Upload an existing report even after a finding fails the job.
+        if: ${{ !cancelled() && hashFiles('kics-reports/blocking/results.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: kics-reports/blocking/results.sarif
+          category: KICS Compose Blocking
+
+      - name: Upload audit findings
+        if: ${{ !cancelled() && hashFiles('kics-reports/audit/results.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: kics-reports/audit/results.sarif
+          category: KICS Compose Audit

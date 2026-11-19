@@ -1,5 +1,5 @@
 #!/bin/bash
-# Purpose: Start Docker containers defined in docker-compose.yml
+# Purpose: Start Docker containers defined in docker-compose.yaml
 # Usage: .tools/start-containers.sh [options] -f <compose-file>
 
 # Function to print messages with a timestamp
@@ -48,7 +48,7 @@ show_help() {
 Usage: .tools/start-containers.sh [options] -f <compose-file>
 
 Options:
-  -f, --compose-file <path>        Specify the path to the docker-compose.yml file (required).
+  -f, --compose-file <path>        Specify the path to the docker-compose.yaml file (required).
   -i, --initialize-containers      Initialize the containers after starting them.
   -rmi, --remove-existing-images   Remove existing containers and images before starting.
   -u, --unattended                 Run the script unattended without waiting for user input.
@@ -56,17 +56,17 @@ Options:
   -h, --help                       Display this help message.
 
 Examples:
-  1. Start containers using the default docker-compose.yml file:
-     .tools/start-containers.sh -f docker-compose.yml
+  1. Start containers using the default docker-compose.yaml file:
+     .tools/start-containers.sh -f docker-compose.yaml
 
   2. Remove existing containers and images before starting:
-     .tools/start-containers.sh -f docker-compose.yml --remove-existing-images
+     .tools/start-containers.sh -f docker-compose.yaml --remove-existing-images
 
   3. Start and initialize containers using an LDIF file:
-     .tools/start-containers.sh -f docker-compose.yml --initialize-containers --ldif-file res/ldif/mutillidae.ldif
+     .tools/start-containers.sh -f docker-compose.yaml --initialize-containers --ldif-file res/ldif/mutillidae.ldif
 
   4. Run the script unattended with initialization and image removal:
-     .tools/start-containers.sh -f docker-compose.yml --initialize-containers --ldif-file res/ldif/mutillidae.ldif --remove-existing-images --unattended
+     .tools/start-containers.sh -f docker-compose.yaml --initialize-containers --ldif-file res/ldif/mutillidae.ldif --remove-existing-images --unattended
 
   5. Display help for the script:
      .tools/start-containers.sh --help
