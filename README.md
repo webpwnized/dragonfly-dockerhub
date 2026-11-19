@@ -9,6 +9,8 @@
 
 ## TLDR
 
+    Runs the container image pulled from DockerHub
+
 	docker compose --file .build/docker-compose.yaml up --detach
 
 ## Instructions
