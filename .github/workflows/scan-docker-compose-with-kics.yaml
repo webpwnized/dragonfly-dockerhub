@@ -39,7 +39,7 @@ jobs:
 
       - name: Enforce no-new-privileges
         id: blocking
-        uses: Checkmarx/kics-github-action@v2.1.20
+        uses: Checkmarx/kics-github-action@v2.2.1
         with:
           path: .build/docker-compose.yaml
           type: DockerCompose
@@ -62,7 +62,7 @@ jobs:
         # Continue after a blocking finding so developers receive the
         # broader security report in the same workflow run.
         if: ${{ !cancelled() && steps.blocking.outcome != 'skipped' }}
-        uses: Checkmarx/kics-github-action@v2.1.20
+        uses: Checkmarx/kics-github-action@v2.2.1
         with:
           path: .build/docker-compose.yaml
           type: DockerCompose
