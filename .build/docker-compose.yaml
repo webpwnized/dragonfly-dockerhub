@@ -1,38 +1,62 @@
-# Docker Compose Configuration for Dragonfly Application
-# Documentation: https://github.com/compose-spec/compose-spec/blob/master/spec.md
+# Docker Compose configuration for the Dragonfly application.
+#
+# Start from the repository root:
+#   docker compose -f .build/docker-compose.yaml up -d
+#
+# Validate configuration:
+#   docker compose -f .build/docker-compose.yaml config --quiet
+#
+# Check container health:
+#   docker compose -f .build/docker-compose.yaml ps
 
-# From project root, run with:
-#   docker compose --file .build/docker-compose.yaml up --detach
-
-version: '3.8'
-
-# Define services.
 services:
-  # Service for the www container.
   www:
-    # Container name for easy identification.
+    # Keep the familiar container name for local commands.
     container_name: www
 
-    # Docker image for the Dragonfly www service.
+    # Run the published Dragonfly image.
     image: docker.io/webpwnized/dragonfly:www
 
-    # Prevent processes from gaining additional privileges.
-    # security_opt:
-      # - no-new-privileges:true
+    # Prevent executable files from granting additional privileges.
+    security_opt:
+      - no-new-privileges:true
 
-    # Port mappings.
+    # Limit resource consumption on the Docker host.
+    # These are initial values to verify during testing.
+    # Cloud Run resource limits are configured separately in Terraform.
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+
+    # Check the existing health.php endpoint using PHP itself.
+    # This avoids installing curl or another utility in the slim image.
+    # Require the exact response produced by the health endpoint.
+    healthcheck:
+      test:
+        - CMD
+        - php
+        - -r
+        - >-
+          $context = stream_context_create(['http' => ['timeout' => 2]]);
+          $body = @file_get_contents('http://127.0.0.1/health.php', false, $context);
+          exit($body === "ok\n" ? 0 : 1);
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
     ports:
-      # Map host port 80 to container port 80 on localhost.
-      - 127.0.0.1:80:80
+      # Serve the workshop's usual local browser address.
+      - "127.0.0.1:80:80"
 
-      # Map host port 8888 to container port 80 for DAST scanning.
-      - 127.0.0.1:8888:80
+      # Provide the existing endpoint used by DAST scanning.
+      - "127.0.0.1:8888:80"
 
-    # Connect the service to the HTTP network.
+    # Attach the service to the existing HTTP network.
     networks:
       - httpnet
 
-# Define networks.
 networks:
-  # Network segment for HTTP communication between containers.
   httpnet:
