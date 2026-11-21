@@ -1,9 +1,21 @@
 version: 2
 
 updates:
-  # Update action references in .github/workflows/.
+  # GitHub Actions updates for main.
   - package-ecosystem: github-actions
     directory: /
+    target-branch: main
+    schedule:
+      interval: weekly
+    groups:
+      workflow-actions:
+        patterns:
+          - "*"
+
+  # GitHub Actions updates for development.
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: development
     schedule:
       interval: weekly
     groups:
