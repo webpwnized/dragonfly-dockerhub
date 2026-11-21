@@ -33,15 +33,16 @@ services:
     # Check the existing health.php endpoint using PHP itself.
     # This avoids installing curl or another utility in the slim image.
     # Require the exact response produced by the health endpoint.
+    # Double dollar signs preserve PHP variables through Compose interpolation.
     healthcheck:
       test:
         - CMD
         - php
         - -r
         - >-
-          $context = stream_context_create(['http' => ['timeout' => 2]]);
-          $body = @file_get_contents('http://127.0.0.1/health.php', false, $context);
-          exit($body === "ok\n" ? 0 : 1);
+          $$context = stream_context_create(['http' => ['timeout' => 2]]);
+          $$body = @file_get_contents('http://127.0.0.1/health.php', false, $$context);
+          exit($$body === "ok\n" ? 0 : 1);
       interval: 30s
       timeout: 3s
       retries: 3
